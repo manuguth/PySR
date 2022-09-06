@@ -35,17 +35,17 @@ RUN PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install ${PYVERSION}
 ENV PATH="/root/.pyenv/versions/$PYVERSION/bin:$PATH"
 
 # Install IPython and other useful libraries:
-RUN pip install ipython jupyter matplotlib numpy
+RUN pip install ipython jupyter matplotlib
 
 # Caches install (https://stackoverflow.com/questions/25305788/how-to-avoid-reinstalling-packages-when-building-docker-image-for-python-project)
 ADD ./requirements.txt /pysr/requirements.txt
-RUN pip3 install -r /pysr/requirements.txt
+RUN python3 -m pip install -r /pysr/requirements.txt
 
 # Install PySR:
 # We do a minimal copy so it doesn't need to rerun at every file change:
 ADD ./setup.py /pysr/setup.py
 ADD ./pysr/ /pysr/pysr/
-RUN pip3 install .
+RUN python3 -m pip install .
 
 # Install Julia pre-requisites:
 RUN python3 -c 'import pysr; pysr.install()'
